@@ -1,399 +1,791 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEXORA — Organizational Intelligence</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#07111f">
+<title>NEXORA | Organizational Intelligence</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#050b14;
+  --panel:#0b1625;
+  --panel2:#0f1d30;
+  --line:#1c3048;
+  --text:#edf4ff;
+  --muted:#8497ad;
+  --cyan:#58d7ff;
+  --green:#62dfad;
+  --yellow:#f2c66d;
+  --red:#ff7272;
+}
+body{
+  font-family:Inter,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.app{display:flex;min-height:100vh}
+.sidebar{
+  width:250px;
+  background:#07111f;
+  border-right:1px solid var(--line);
+  padding:25px 16px;
+  position:fixed;
+  inset:0 auto 0 0;
+}
+.brand{
+  font-size:27px;
+  font-weight:900;
+  letter-spacing:3px;
+}
+.brand-sub{
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:1.5px;
+  margin-top:5px;
+  margin-bottom:32px;
+}
+.nav button{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#9aacc1;
+  padding:12px 13px;
+  margin:4px 0;
+  text-align:left;
+  border-radius:9px;
+}
+.nav button:hover,.nav button.active{
+  background:#12243a;
+  color:white;
+}
+.main{
+  margin-left:250px;
+  width:calc(100% - 250px);
+  padding:28px;
+}
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:25px;
+}
+h1{font-size:28px}
+.subtitle{color:var(--muted);font-size:13px;margin-top:6px}
+.status{
+  border:1px solid #23506a;
+  color:var(--green);
+  padding:8px 13px;
+  border-radius:20px;
+  font-size:11px;
+  white-space:nowrap;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  margin-bottom:18px;
+}
+.card,.panel{
+  background:linear-gradient(145deg,var(--panel),#091321);
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+.card{padding:19px}
+.label{
+  color:var(--muted);
+  font-size:10px;
+  letter-spacing:1px;
+}
+.value{
+  font-size:29px;
+  font-weight:800;
+  margin:9px 0;
+}
+.good{color:var(--green)}
+.warn{color:var(--yellow)}
+.bad{color:var(--red)}
+.small{font-size:11px;color:var(--muted)}
+.layout{
+  display:grid;
+  grid-template-columns:1.35fr 1fr;
+  gap:17px;
+  margin-bottom:17px;
+}
+.panel{padding:21px}
+.panel h2{
+  font-size:16px;
+  margin-bottom:17px;
+}
+.process{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:7px;
+}
+.node{
+  background:#102239;
+  border:1px solid #29425d;
+  border-radius:8px;
+  padding:10px 12px;
+  font-size:11px;
+}
+.arrow{color:#54708c}
+.risk-row,.dependency-row,.memory-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid #17293e;
+  font-size:12px;
+}
+.risk-row:last-child,.dependency-row:last-child,.memory-row:last-child{
+  border-bottom:0;
+}
+.bar{
+  height:7px;
+  background:#16283d;
+  border-radius:10px;
+  overflow:hidden;
+  margin-top:8px;
+}
+.fill{
+  height:100%;
+  border-radius:10px;
+}
+.cyan{background:var(--cyan)}
+.green{background:var(--green)}
+.yellow{background:var(--yellow)}
+.red{background:var(--red)}
+textarea,input{
+  width:100%;
+  background:#07111f;
+  color:white;
+  border:1px solid #29415c;
+  border-radius:9px;
+  padding:13px;
+  outline:none;
+}
+textarea{min-height:105px;resize:vertical}
+textarea:focus,input:focus{border-color:var(--cyan)}
+.btn{
+  margin-top:12px;
+  padding:11px 15px;
+  border:1px solid #31506d;
+  background:#122840;
+  color:white;
+  border-radius:9px;
+}
+.btn:hover{background:#183550}
+.result{
+  margin-top:15px;
+  padding:15px;
+  background:#081321;
+  border:1px solid #1e354e;
+  border-radius:10px;
+  line-height:1.7;
+  font-size:12px;
+}
+.sim-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.metric-box{
+  padding:14px;
+  background:#091626;
+  border:1px solid #1c3148;
+  border-radius:9px;
+}
+.metric-box b{
+  display:block;
+  font-size:21px;
+  margin-top:5px;
+}
+.section-title{
+  margin:25px 0 13px;
+  font-size:12px;
+  color:#9eb0c5;
+  letter-spacing:1.5px;
+}
+.hidden{display:none}
+.mobile-menu{display:none}
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #07111f;
-      color: #e8eef7;
-      min-height: 100vh;
-    }
-
-    .app {
-      display: flex;
-      min-height: 100vh;
-    }
-
-    .sidebar {
-      width: 250px;
-      background: #0b1728;
-      border-right: 1px solid #1d3048;
-      padding: 25px 16px;
-    }
-
-    .logo {
-      font-size: 25px;
-      font-weight: 800;
-      letter-spacing: 2px;
-      margin-bottom: 8px;
-    }
-
-    .tagline {
-      font-size: 11px;
-      color: #7f94ad;
-      margin-bottom: 35px;
-    }
-
-    .nav button {
-      width: 100%;
-      padding: 13px 14px;
-      margin-bottom: 8px;
-      border: 0;
-      border-radius: 9px;
-      background: transparent;
-      color: #a9b8ca;
-      text-align: left;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .nav button:hover,
-    .nav button.active {
-      background: #142942;
-      color: white;
-    }
-
-    .main {
-      flex: 1;
-      padding: 30px;
-      overflow: auto;
-    }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 28px;
-    }
-
-    .title h1 {
-      font-size: 28px;
-      margin-bottom: 7px;
-    }
-
-    .title p {
-      color: #7f94ad;
-      font-size: 14px;
-    }
-
-    .status {
-      padding: 9px 14px;
-      border: 1px solid #23405d;
-      border-radius: 20px;
-      color: #8fe0bd;
-      font-size: 12px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 22px;
-    }
-
-    .card {
-      background: #0c1a2d;
-      border: 1px solid #1b3149;
-      border-radius: 14px;
-      padding: 20px;
-    }
-
-    .metric {
-      font-size: 29px;
-      font-weight: 700;
-      margin: 10px 0;
-    }
-
-    .label {
-      color: #8095ad;
-      font-size: 12px;
-    }
-
-    .positive {
-      color: #65d6a0;
-      font-size: 12px;
-    }
-
-    .warning {
-      color: #f0bd65;
-      font-size: 12px;
-    }
-
-    .section {
-      display: grid;
-      grid-template-columns: 1.4fr 1fr;
-      gap: 18px;
-      margin-bottom: 18px;
-    }
-
-    .panel {
-      background: #0c1a2d;
-      border: 1px solid #1b3149;
-      border-radius: 14px;
-      padding: 22px;
-    }
-
-    .panel h2 {
-      font-size: 17px;
-      margin-bottom: 18px;
-    }
-
-    .process {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      flex-wrap: wrap;
-    }
-
-    .node {
-      padding: 12px 15px;
-      background: #12243a;
-      border: 1px solid #29445f;
-      border-radius: 9px;
-      font-size: 12px;
-    }
-
-    .arrow {
-      color: #59728e;
-    }
-
-    .risk {
-      display: flex;
-      justify-content: space-between;
-      padding: 13px 0;
-      border-bottom: 1px solid #182c42;
-      font-size: 13px;
-    }
-
-    .risk:last-child {
-      border-bottom: 0;
-    }
-
-    .score {
-      font-weight: 700;
-    }
-
-    .high {
-      color: #ff7d7d;
-    }
-
-    .medium {
-      color: #f0bd65;
-    }
-
-    .low {
-      color: #65d6a0;
-    }
-
-    .insight {
-      line-height: 1.7;
-      color: #b7c5d5;
-      font-size: 13px;
-    }
-
-    .action {
-      margin-top: 18px;
-      padding: 13px 17px;
-      background: #142942;
-      border: 1px solid #29445f;
-      border-radius: 9px;
-      color: white;
-      cursor: pointer;
-    }
-
-    @media (max-width: 900px) {
-      .sidebar {
-        width: 190px;
-      }
-
-      .grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .section {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 650px) {
-      .app {
-        display: block;
-      }
-
-      .sidebar {
-        width: 100%;
-        border-right: 0;
-        border-bottom: 1px solid #1d3048;
-      }
-
-      .main {
-        padding: 18px;
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+@media(max-width:950px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .layout{grid-template-columns:1fr}
+}
+@media(max-width:680px){
+  .sidebar{
+    position:relative;
+    width:100%;
+    border-right:0;
+    border-bottom:1px solid var(--line);
+    padding:17px;
+  }
+  .app{display:block}
+  .main{
+    margin-left:0;
+    width:100%;
+    padding:17px;
+  }
+  .grid{grid-template-columns:1fr}
+  .top{align-items:flex-start}
+  .top h1{font-size:23px}
+  .status{font-size:9px}
+}
+</style>
 </head>
 
 <body>
 
 <div class="app">
 
-  <aside class="sidebar">
-    <div class="logo">NEXORA</div>
-    <div class="tagline">ORGANIZATIONAL INTELLIGENCE</div>
+<aside class="sidebar">
+  <div class="brand">NEXORA</div>
+  <div class="brand-sub">ORGANIZATIONAL INTELLIGENCE</div>
 
-    <div class="nav">
-      <button class="active">◉ Executive Overview</button>
-      <button>⌁ Process Discovery</button>
-      <button>⚡ Friction Radar</button>
-      <button>◎ Dependency Graph</button>
-      <button>◈ AI Investigator</button>
-      <button>△ Failure Radar</button>
-      <button>◇ What-If Simulator</button>
-      <button>▣ Company Memory</button>
+  <nav class="nav">
+    <button class="active" onclick="showSection('overview',this)">◉ Executive Overview</button>
+    <button onclick="showSection('process',this)">⌁ Process Discovery</button>
+    <button onclick="showSection('friction',this)">⚡ Friction Radar</button>
+    <button onclick="showSection('dependency',this)">◎ Dependency Intelligence</button>
+    <button onclick="showSection('investigator',this)">◈ AI Investigator</button>
+    <button onclick="showSection('failure',this)">△ Failure Radar</button>
+    <button onclick="showSection('simulator',this)">◇ What-If Simulator</button>
+    <button onclick="showSection('memory',this)">▣ Company Memory</button>
+  </nav>
+</aside>
+
+<main class="main">
+
+<header class="top">
+  <div>
+    <h1 id="pageTitle">Executive Intelligence</h1>
+    <div class="subtitle" id="pageSubtitle">
+      See how your business really works.
     </div>
-  </aside>
+  </div>
+  <div class="status">● INTELLIGENCE ENGINE ONLINE</div>
+</header>
 
-  <main class="main">
+<!-- OVERVIEW -->
+<section id="overview">
 
-    <div class="topbar">
-      <div class="title">
-        <h1>Organizational Intelligence</h1>
-        <p>See how your business really works.</p>
-      </div>
+<div class="grid">
+  <div class="card">
+    <div class="label">WORKFLOWS DISCOVERED</div>
+    <div class="value">148</div>
+    <div class="small good">↑ 12 this month</div>
+  </div>
 
-      <div class="status">● SYSTEM MONITORING</div>
-    </div>
+  <div class="card">
+    <div class="label">FRICTION INDEX</div>
+    <div class="value warn">31%</div>
+    <div class="small">Attention required</div>
+  </div>
 
-    <div class="grid">
+  <div class="card">
+    <div class="label">HIDDEN DEPENDENCIES</div>
+    <div class="value bad">27</div>
+    <div class="small">6 critical</div>
+  </div>
 
-      <div class="card">
-        <div class="label">WORKFLOWS DISCOVERED</div>
-        <div class="metric">148</div>
-        <div class="positive">↑ 12 this month</div>
-      </div>
+  <div class="card">
+    <div class="label">OPERATIONAL HEALTH</div>
+    <div class="value good">82</div>
+    <div class="small">Healthy range</div>
+  </div>
+</div>
 
-      <div class="card">
-        <div class="label">FRICTION INDEX</div>
-        <div class="metric">31%</div>
-        <div class="warning">Attention required</div>
-      </div>
+<div class="layout">
 
-      <div class="card">
-        <div class="label">HIDDEN DEPENDENCIES</div>
-        <div class="metric">27</div>
-        <div class="warning">6 critical</div>
-      </div>
+<div class="panel">
+  <h2>Live Process Discovery</h2>
 
-      <div class="card">
-        <div class="label">OPERATIONAL HEALTH</div>
-        <div class="metric">82</div>
-        <div class="positive">Healthy</div>
-      </div>
+  <div class="process">
+    <div class="node">Customer Request</div>
+    <span class="arrow">→</span>
+    <div class="node">Sales</div>
+    <span class="arrow">→</span>
+    <div class="node">Validation</div>
+    <span class="arrow">→</span>
+    <div class="node">Finance</div>
+    <span class="arrow">→</span>
+    <div class="node">Resolution</div>
+  </div>
 
-    </div>
+  <div class="section-title">PROCESS HEALTH</div>
 
-    <div class="section">
+  <div class="bar">
+    <div class="fill cyan" style="width:76%"></div>
+  </div>
 
-      <div class="panel">
-        <h2>Live Process Discovery</h2>
+  <p class="small" style="margin-top:9px">
+    Estimated process efficiency: 76%
+  </p>
+</div>
 
-        <div class="process">
-          <div class="node">Customer Request</div>
-          <div class="arrow">→</div>
-          <div class="node">Sales</div>
-          <div class="arrow">→</div>
-          <div class="node">Validation</div>
-          <div class="arrow">→</div>
-          <div class="node">Finance</div>
-          <div class="arrow">→</div>
-          <div class="node">Resolution</div>
-        </div>
+<div class="panel">
+  <h2>Future Failure Radar</h2>
 
-        <button class="action" onclick="runInvestigation()">
-          Run AI Investigation
-        </button>
-      </div>
+  <div class="risk-row">
+    <span>Approval bottleneck</span>
+    <b class="bad">78%</b>
+  </div>
 
-      <div class="panel">
-        <h2>Future Failure Radar</h2>
+  <div class="risk-row">
+    <span>Knowledge concentration</span>
+    <b class="warn">64%</b>
+  </div>
 
-        <div class="risk">
-          <span>Approval bottleneck</span>
-          <span class="score high">78%</span>
-        </div>
-
-        <div class="risk">
-          <span>Knowledge concentration</span>
-          <span class="score medium">64%</span>
-        </div>
-
-        <div class="risk">
-          <span>Process duplication</span>
-          <span class="score low">22%</span>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="section">
-
-      <div class="panel">
-        <h2>AI Organizational Insight</h2>
-
-        <p class="insight" id="insight">
-          NEXORA is continuously analysing operational patterns,
-          workflow dependencies and process friction.
-          The system will identify hidden operational risks
-          before they become visible business problems.
-        </p>
-
-      </div>
-
-      <div class="panel">
-        <h2>Executive Recommendation</h2>
-
-        <p class="insight">
-          Reduce the current approval chain by one validation
-          stage and monitor the resulting risk impact.
-        </p>
-
-        <button class="action" onclick="simulateChange()">
-          Simulate Change
-        </button>
-
-      </div>
-
-    </div>
-
-  </main>
+  <div class="risk-row">
+    <span>Process duplication</span>
+    <b class="good">22%</b>
+  </div>
+</div>
 
 </div>
 
+<div class="layout">
+
+<div class="panel">
+  <h2>AI Organizational Insight</h2>
+
+  <p class="small" style="line-height:1.8">
+    NEXORA has detected a recurring dependency between
+    Validation and Finance. The current workflow contains
+    multiple handoffs that may increase resolution time.
+  </p>
+
+  <button class="btn" onclick="investigateDefault()">
+    Run AI Investigation
+  </button>
+
+  <div id="overviewResult" class="result hidden"></div>
+</div>
+
+<div class="panel">
+  <h2>Executive Recommendation</h2>
+
+  <p class="small" style="line-height:1.8">
+    Consider consolidating one approval stage and introducing
+    an automated exception queue.
+  </p>
+
+  <button class="btn" onclick="quickSimulation()">
+    Simulate Recommendation
+  </button>
+
+  <div id="quickResult" class="result hidden"></div>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- PROCESS -->
+<section id="process" class="hidden">
+
+<div class="panel">
+<h2>Process Discovery Engine</h2>
+
+<p class="small" style="line-height:1.7;margin-bottom:15px">
+Describe any company process using arrows between steps.
+NEXORA will estimate complexity and operational friction.
+</p>
+
+<textarea id="processInput"
+placeholder="Example: Customer request → Sales → Manager → Finance → Approval → Delivery"></textarea>
+
+<button class="btn" onclick="analyzeProcess()">Analyze Process</button>
+
+<div id="processResult" class="result hidden"></div>
+</div>
+
+</section>
+
+
+<!-- FRICTION -->
+<section id="friction" class="hidden">
+
+<div class="grid">
+
+<div class="card">
+<div class="label">TOTAL FRICTION</div>
+<div class="value warn">31%</div>
+<div class="small">Across discovered workflows</div>
+</div>
+
+<div class="card">
+<div class="label">BOTTLENECKS</div>
+<div class="value bad">14</div>
+<div class="small">3 high priority</div>
+</div>
+
+<div class="card">
+<div class="label">REPEATED WORK</div>
+<div class="value warn">19%</div>
+<div class="small">Potential automation</div>
+</div>
+
+<div class="card">
+<div class="label">RECOVERY POTENTIAL</div>
+<div class="value good">23%</div>
+<div class="small">Estimated efficiency gain</div>
+</div>
+
+</div>
+
+<div class="panel">
+<h2>Friction Radar</h2>
+
+<div class="risk-row">
+<span>Manual approval chain</span>
+<b class="bad">86%</b>
+</div>
+
+<div class="risk-row">
+<span>Duplicate data entry</span>
+<b class="warn">61%</b>
+</div>
+
+<div class="risk-row">
+<span>Cross-team handoff</span>
+<b class="warn">54%</b>
+</div>
+
+<div class="risk-row">
+<span>Waiting time</span>
+<b class="good">29%</b>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- DEPENDENCY -->
+<section id="dependency" class="hidden">
+
+<div class="panel">
+<h2>Hidden Dependency Intelligence</h2>
+
+<p class="small" style="margin-bottom:15px">
+NEXORA maps critical operational dependencies that may not
+appear in official organizational charts.
+</p>
+
+<div class="dependency-row">
+<span>Finance approval → Employee A</span>
+<b class="bad">CRITICAL</b>
+</div>
+
+<div class="dependency-row">
+<span>Customer escalation → Manager B</span>
+<b class="warn">HIGH</b>
+</div>
+
+<div class="dependency-row">
+<span>Vendor process → Employee C</span>
+<b class="warn">HIGH</b>
+</div>
+
+<div class="dependency-row">
+<span>Reporting → Team D</span>
+<b class="good">LOW</b>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- INVESTIGATOR -->
+<section id="investigator" class="hidden">
+
+<div class="panel">
+<h2>AI Investigator</h2>
+
+<p class="small" style="line-height:1.7">
+Ask NEXORA why a business process is slow, expensive,
+risky or repeatedly failing.
+</p>
+
+<textarea id="questionInput"
+style="margin-top:15px"
+placeholder="Example: Why is customer onboarding taking too long?"></textarea>
+
+<button class="btn" onclick="investigate()">Investigate</button>
+
+<div id="investigatorResult" class="result hidden"></div>
+</div>
+
+</section>
+
+
+<!-- FAILURE -->
+<section id="failure" class="hidden">
+
+<div class="panel">
+<h2>Future Failure Radar</h2>
+
+<p class="small" style="line-height:1.7;margin-bottom:15px">
+Predictive operational signals detected from current patterns.
+</p>
+
+<div class="risk-row">
+<span>Single-person dependency</span>
+<b class="bad">78%</b>
+</div>
+
+<div class="risk-row">
+<span>Approval congestion</span>
+<b class="bad">72%</b>
+</div>
+
+<div class="risk-row">
+<span>Process knowledge loss</span>
+<b class="warn">64%</b>
+</div>
+
+<div class="risk-row">
+<span>Duplicate workflow growth</span>
+<b class="warn">49%</b>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- SIMULATOR -->
+<section id="simulator" class="hidden">
+
+<div class="panel">
+<h2>What-If Change Simulator</h2>
+
+<p class="small" style="line-height:1.7;margin-bottom:15px">
+Test an operational change before applying it to the real company.
+</p>
+
+<input id="changeInput"
+placeholder="Example: Remove one approval stage">
+
+<button class="btn" onclick="simulateChange()">
+Run Simulation
+</button>
+
+<div id="simulationResult" class="result hidden"></div>
+
+</div>
+
+</section>
+
+
+<!-- MEMORY -->
+<section id="memory" class="hidden">
+
+<div class="panel">
+<h2>Company Memory</h2>
+
+<p class="small" style="line-height:1.7;margin-bottom:15px">
+A future knowledge layer for preserving operational context,
+decisions, exceptions and institutional knowledge.
+</p>
+
+<div class="memory-row">
+<span>Customer escalation procedure</span>
+<span class="good">Captured</span>
+</div>
+
+<div class="memory-row">
+<span>Finance exception workflow</span>
+<span class="good">Captured</span>
+</div>
+
+<div class="memory-row">
+<span>Vendor negotiation history</span>
+<span class="warn">Partial</span>
+</div>
+
+<div class="memory-row">
+<span>Critical undocumented process</span>
+<span class="bad">Missing</span>
+</div>
+
+</div>
+
+</section>
+
+</main>
+</div>
+
+
 <script>
 
-function runInvestigation() {
-  document.getElementById("insight").innerText =
-    "AI investigation complete: the primary friction appears between Validation and Finance. Estimated process delay: 18–24%. Recommended action: automate the validation handoff and introduce a single exception queue.";
+const sectionInfo={
+overview:["Executive Intelligence","See how your business really works."],
+process:["Process Discovery","Discover complexity and operational friction."],
+friction:["Friction Radar","Find where work slows down."],
+dependency:["Dependency Intelligence","Reveal hidden organizational dependencies."],
+investigator:["AI Investigator","Understand why operational problems happen."],
+failure:["Future Failure Radar","Identify potential operational failure signals."],
+simulator:["What-If Simulator","Test operational changes before implementation."],
+memory:["Company Memory","Preserve institutional knowledge and operational context."]
+};
+
+function showSection(id,button){
+
+document.querySelectorAll("main section").forEach(s=>{
+s.classList.add("hidden");
+});
+
+document.getElementById(id).classList.remove("hidden");
+
+document.querySelectorAll(".nav button").forEach(b=>{
+b.classList.remove("active");
+});
+
+button.classList.add("active");
+
+document.getElementById("pageTitle").innerText=sectionInfo[id][0];
+document.getElementById("pageSubtitle").innerText=sectionInfo[id][1];
+
+window.scrollTo({top:0,behavior:"smooth"});
 }
 
-function simulateChange() {
-  document.getElementById("insight").innerText =
-    "What-if simulation: removing one approval stage could reduce processing time by approximately 31%, while estimated operational risk increases by 3%. Recommended: run a controlled pilot before full deployment.";
+
+function analyzeProcess(){
+
+const input=document.getElementById("processInput").value.trim();
+const result=document.getElementById("processResult");
+
+if(!input){
+result.innerHTML="<span class='bad'>Enter a business process first.</span>";
+result.classList.remove("hidden");
+return;
+}
+
+const steps=input.split("→").map(x=>x.trim()).filter(Boolean);
+const count=steps.length;
+
+const friction=Math.min(95,Math.max(8,count*11));
+const risk=Math.min(92,Math.max(6,count*8));
+
+let level=friction>=65?"HIGH":friction>=40?"MEDIUM":"LOW";
+
+result.innerHTML=`
+<b>PROCESS ANALYSIS COMPLETE</b><br><br>
+Steps detected: <b>${count}</b><br>
+Estimated friction: <b class="${level==="HIGH"?"bad":level==="MEDIUM"?"warn":"good"}">${friction}%</b><br>
+Operational risk: <b>${risk}%</b><br>
+Complexity level: <b>${level}</b><br><br>
+<strong>NEXORA recommendation:</strong><br>
+${count>6
+?"The process contains a high number of handoffs. Consider automation, exception routing and ownership consolidation."
+:"The process appears relatively streamlined. Monitor recurring delays and hidden dependencies."
+}
+`;
+
+result.classList.remove("hidden");
+}
+
+
+function investigate(){
+
+const q=document.getElementById("questionInput").value.trim();
+const result=document.getElementById("investigatorResult");
+
+if(!q){
+result.innerHTML="<span class='bad'>Ask an operational question first.</span>";
+result.classList.remove("hidden");
+return;
+}
+
+result.innerHTML=`
+<b>INVESTIGATION COMPLETE</b><br><br>
+Question analysed: <b>${escapeHtml(q)}</b><br><br>
+<b>Primary signal:</b> Multiple operational handoffs may be creating hidden waiting time.<br>
+<b>Potential cause:</b> Manual validation and approval dependencies.<br>
+<b>Risk:</b> Medium–High.<br>
+<b>Recommended action:</b> Consolidate ownership, automate repetitive validation and create an exception-only approval path.
+`;
+
+result.classList.remove("hidden");
+}
+
+
+function investigateDefault(){
+
+const result=document.getElementById("overviewResult");
+
+result.innerHTML=`
+<b>AI INVESTIGATION COMPLETE</b><br><br>
+Primary friction detected between <b>Validation</b> and <b>Finance</b>.<br>
+Estimated avoidable waiting time: <b>18–24%</b>.<br>
+Risk concentration: <b>Medium–High</b>.<br><br>
+Recommendation: automate validation handoff and route only exceptions for manual approval.
+`;
+
+result.classList.remove("hidden");
+}
+
+
+function quickSimulation(){
+
+const result=document.getElementById("quickResult");
+
+result.innerHTML=`
+<b>SIMULATION RESULT</b><br><br>
+Estimated processing time: <b class="good">−31%</b><br>
+Estimated operational cost: <b class="good">−14%</b><br>
+Estimated risk: <b class="warn">+3%</b><br><br>
+Recommendation: run a controlled pilot before full implementation.
+`;
+
+result.classList.remove("hidden");
+}
+
+
+function simulateChange(){
+
+const input=document.getElementById("changeInput").value.trim();
+const result=document.getElementById("simulationResult");
+
+if(!input){
+result.innerHTML="<span class='bad'>Describe the change you want to simulate.</span>";
+result.classList.remove("hidden");
+return;
+}
+
+result.innerHTML=`
+<b>WHAT-IF SIMULATION COMPLETE</b><br><br>
+Change tested: <b>${escapeHtml(input)}</b><br><br>
+Estimated efficiency impact: <b class="good">+24%</b><br>
+Estimated processing time: <b class="good">−27%</b><br>
+Operational risk impact: <b class="warn">+4%</b><br>
+Implementation confidence: <b>74%</b><br><br>
+Recommendation: validate the change through a limited pilot and monitor exceptions.
+`;
+
+result.classList.remove("hidden");
+}
+
+
+function escapeHtml(text){
+return text
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 }
 
 </script>
