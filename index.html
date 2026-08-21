@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXORA — Organizational Intelligence</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #07111f;
+      color: #e8eef7;
+      min-height: 100vh;
+    }
+
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: #0b1728;
+      border-right: 1px solid #1d3048;
+      padding: 25px 16px;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .tagline {
+      font-size: 11px;
+      color: #7f94ad;
+      margin-bottom: 35px;
+    }
+
+    .nav button {
+      width: 100%;
+      padding: 13px 14px;
+      margin-bottom: 8px;
+      border: 0;
+      border-radius: 9px;
+      background: transparent;
+      color: #a9b8ca;
+      text-align: left;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .nav button:hover,
+    .nav button.active {
+      background: #142942;
+      color: white;
+    }
+
+    .main {
+      flex: 1;
+      padding: 30px;
+      overflow: auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .title h1 {
+      font-size: 28px;
+      margin-bottom: 7px;
+    }
+
+    .title p {
+      color: #7f94ad;
+      font-size: 14px;
+    }
+
+    .status {
+      padding: 9px 14px;
+      border: 1px solid #23405d;
+      border-radius: 20px;
+      color: #8fe0bd;
+      font-size: 12px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .card {
+      background: #0c1a2d;
+      border: 1px solid #1b3149;
+      border-radius: 14px;
+      padding: 20px;
+    }
+
+    .metric {
+      font-size: 29px;
+      font-weight: 700;
+      margin: 10px 0;
+    }
+
+    .label {
+      color: #8095ad;
+      font-size: 12px;
+    }
+
+    .positive {
+      color: #65d6a0;
+      font-size: 12px;
+    }
+
+    .warning {
+      color: #f0bd65;
+      font-size: 12px;
+    }
+
+    .section {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .panel {
+      background: #0c1a2d;
+      border: 1px solid #1b3149;
+      border-radius: 14px;
+      padding: 22px;
+    }
+
+    .panel h2 {
+      font-size: 17px;
+      margin-bottom: 18px;
+    }
+
+    .process {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+
+    .node {
+      padding: 12px 15px;
+      background: #12243a;
+      border: 1px solid #29445f;
+      border-radius: 9px;
+      font-size: 12px;
+    }
+
+    .arrow {
+      color: #59728e;
+    }
+
+    .risk {
+      display: flex;
+      justify-content: space-between;
+      padding: 13px 0;
+      border-bottom: 1px solid #182c42;
+      font-size: 13px;
+    }
+
+    .risk:last-child {
+      border-bottom: 0;
+    }
+
+    .score {
+      font-weight: 700;
+    }
+
+    .high {
+      color: #ff7d7d;
+    }
+
+    .medium {
+      color: #f0bd65;
+    }
+
+    .low {
+      color: #65d6a0;
+    }
+
+    .insight {
+      line-height: 1.7;
+      color: #b7c5d5;
+      font-size: 13px;
+    }
+
+    .action {
+      margin-top: 18px;
+      padding: 13px 17px;
+      background: #142942;
+      border: 1px solid #29445f;
+      border-radius: 9px;
+      color: white;
+      cursor: pointer;
+    }
+
+    @media (max-width: 900px) {
+      .sidebar {
+        width: 190px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .section {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .app {
+        display: block;
+      }
+
+      .sidebar {
+        width: 100%;
+        border-right: 0;
+        border-bottom: 1px solid #1d3048;
+      }
+
+      .main {
+        padding: 18px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="logo">NEXORA</div>
+    <div class="tagline">ORGANIZATIONAL INTELLIGENCE</div>
+
+    <div class="nav">
+      <button class="active">◉ Executive Overview</button>
+      <button>⌁ Process Discovery</button>
+      <button>⚡ Friction Radar</button>
+      <button>◎ Dependency Graph</button>
+      <button>◈ AI Investigator</button>
+      <button>△ Failure Radar</button>
+      <button>◇ What-If Simulator</button>
+      <button>▣ Company Memory</button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div class="title">
+        <h1>Organizational Intelligence</h1>
+        <p>See how your business really works.</p>
+      </div>
+
+      <div class="status">● SYSTEM MONITORING</div>
+    </div>
+
+    <div class="grid">
+
+      <div class="card">
+        <div class="label">WORKFLOWS DISCOVERED</div>
+        <div class="metric">148</div>
+        <div class="positive">↑ 12 this month</div>
+      </div>
+
+      <div class="card">
+        <div class="label">FRICTION INDEX</div>
+        <div class="metric">31%</div>
+        <div class="warning">Attention required</div>
+      </div>
+
+      <div class="card">
+        <div class="label">HIDDEN DEPENDENCIES</div>
+        <div class="metric">27</div>
+        <div class="warning">6 critical</div>
+      </div>
+
+      <div class="card">
+        <div class="label">OPERATIONAL HEALTH</div>
+        <div class="metric">82</div>
+        <div class="positive">Healthy</div>
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <div class="panel">
+        <h2>Live Process Discovery</h2>
+
+        <div class="process">
+          <div class="node">Customer Request</div>
+          <div class="arrow">→</div>
+          <div class="node">Sales</div>
+          <div class="arrow">→</div>
+          <div class="node">Validation</div>
+          <div class="arrow">→</div>
+          <div class="node">Finance</div>
+          <div class="arrow">→</div>
+          <div class="node">Resolution</div>
+        </div>
+
+        <button class="action" onclick="runInvestigation()">
+          Run AI Investigation
+        </button>
+      </div>
+
+      <div class="panel">
+        <h2>Future Failure Radar</h2>
+
+        <div class="risk">
+          <span>Approval bottleneck</span>
+          <span class="score high">78%</span>
+        </div>
+
+        <div class="risk">
+          <span>Knowledge concentration</span>
+          <span class="score medium">64%</span>
+        </div>
+
+        <div class="risk">
+          <span>Process duplication</span>
+          <span class="score low">22%</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <div class="panel">
+        <h2>AI Organizational Insight</h2>
+
+        <p class="insight" id="insight">
+          NEXORA is continuously analysing operational patterns,
+          workflow dependencies and process friction.
+          The system will identify hidden operational risks
+          before they become visible business problems.
+        </p>
+
+      </div>
+
+      <div class="panel">
+        <h2>Executive Recommendation</h2>
+
+        <p class="insight">
+          Reduce the current approval chain by one validation
+          stage and monitor the resulting risk impact.
+        </p>
+
+        <button class="action" onclick="simulateChange()">
+          Simulate Change
+        </button>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+<script>
+
+function runInvestigation() {
+  document.getElementById("insight").innerText =
+    "AI investigation complete: the primary friction appears between Validation and Finance. Estimated process delay: 18–24%. Recommended action: automate the validation handoff and introduce a single exception queue.";
+}
+
+function simulateChange() {
+  document.getElementById("insight").innerText =
+    "What-if simulation: removing one approval stage could reduce processing time by approximately 31%, while estimated operational risk increases by 3%. Recommended: run a controlled pilot before full deployment.";
+}
+
+</script>
+
+</body>
+</html>
